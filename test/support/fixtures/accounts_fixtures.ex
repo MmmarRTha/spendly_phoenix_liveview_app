@@ -3,14 +3,15 @@ defmodule Spendly.AccountsFixtures do
   This module defines test helpers for creating
   entities via the `Spendly.Accounts` context.
   """
-
+  def unique_user_name, do: "Martha #{System.unique_integer()}"
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
       email: unique_user_email(),
-      password: valid_user_password()
+      password: valid_user_password(),
+      name: unique_user_name()
     })
   end
 
