@@ -175,6 +175,35 @@ defmodule Spendly.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user's name.
+
+  ## Examples
+
+      iex> change_user_name(user)
+      %Ecto.Changeset{data: %User{}}
+  """
+  def change_user_name(user, attrs \\ %{}) do
+    User.name_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user's name.
+
+  ## Examples
+
+      iex> update_user_name(user, %{name: "New Name"})
+      {:ok, %User{}}
+
+      iex> update_user_name(user, %{name: ""})
+      {:error, %Ecto.Changeset{}}
+  """
+  def update_user_name(user, attrs \\ %{}) do
+    user
+    |> User.name_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for changing the user password.
 
   ## Examples
