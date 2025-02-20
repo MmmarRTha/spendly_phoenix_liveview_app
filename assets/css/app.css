@@ -3,3 +3,21 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+.auth-container {
+    @apply flex items-center justify-center p-4 bg-gray-100 shadow-2xl min-h-[40rem] shadow-blue-200/50 rounded-xl sm:p-3;
+}
+
+  .auth-card {
+    @apply w-full max-w-md p-8 space-y-8 bg-white shadow-2xl rounded-xl;
+}
+
+  .auth-card h2 {
+    @apply text-3xl font-extrabold text-gray-900;
+}
+  .auth-card h3 {
+    @apply text-2xl font-extrabold text-gray-900;
+}
+
+  .btn-sub {
+    @apply relative flex justify-center px-4 py-3 text-base font-semibold transition-colors duration-150 bg-yellow-600 border border-transparent rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500;
+}

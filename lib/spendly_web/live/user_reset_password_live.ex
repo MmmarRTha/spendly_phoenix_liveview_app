@@ -5,35 +5,39 @@ defmodule SpendlyWeb.UserResetPasswordLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">Reset Password</.header>
+    <div class="auth-container">
+      <div class="auth-card">
+        <.header class="text-center">
+          <h3>Reset Password</h3>
+        </.header>
 
-      <.simple_form
-        for={@form}
-        id="reset_password_form"
-        phx-submit="reset_password"
-        phx-change="validate"
-      >
-        <.error :if={@form.errors != []}>
-          Oops, something went wrong! Please check the errors below.
-        </.error>
+        <.simple_form
+          for={@form}
+          id="reset_password_form"
+          phx-submit="reset_password"
+          phx-change="validate"
+        >
+          <.error :if={@form.errors != []}>
+            Oops, something went wrong! Please check the errors below.
+          </.error>
 
-        <.input field={@form[:password]} type="password" label="New password" required />
-        <.input
-          field={@form[:password_confirmation]}
-          type="password"
-          label="Confirm new password"
-          required
-        />
-        <:actions>
-          <.button phx-disable-with="Resetting..." class="w-full">Reset Password</.button>
-        </:actions>
-      </.simple_form>
+          <.input field={@form[:password]} type="password" label="New password:" required />
+          <.input
+            field={@form[:password_confirmation]}
+            type="password"
+            label="Confirm new password:"
+            required
+          />
+          <:actions>
+            <.button phx-disable-with="Resetting..." class="w-full btn-sub">Reset Password</.button>
+          </:actions>
+        </.simple_form>
 
-      <p class="text-center text-sm mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
-      </p>
+        <p class="font-medium text-center text-amber-800">
+          <.link href={~p"/users/register"} class="hover:underline">Register</.link>
+          | <.link href={~p"/users/log_in"} class="hover:underline">Log in</.link>
+        </p>
+      </div>
     </div>
     """
   end
