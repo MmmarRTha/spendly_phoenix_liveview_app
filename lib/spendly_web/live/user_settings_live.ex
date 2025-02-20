@@ -35,6 +35,19 @@ defmodule SpendlyWeb.UserSettingsLive do
       </div>
       <div>
         <.simple_form
+          for={@name_form}
+          id="name_form"
+          phx-change="validate_name"
+          phx-submit="update_name"
+        >
+          <.input field={@name_form[:name]} type="text" label="name" required />
+          <:actions>
+            <.button phx-disable-with="Changing...">Change Name</.button>
+          </:actions>
+        </.simple_form>
+      </div>
+      <div>
+        <.simple_form
           for={@password_form}
           id="password_form"
           action={~p"/users/log_in?_action=password_updated"}
@@ -89,14 +102,17 @@ defmodule SpendlyWeb.UserSettingsLive do
   def mount(_params, _session, socket) do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
+    name_changeset = Accounts.change_user_name(user)
     password_changeset = Accounts.change_user_password(user)
 
     socket =
       socket
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
+      |> assign(:current_name, user.name)
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
+      |> assign(:name_form, to_form(name_changeset))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
 
@@ -132,6 +148,38 @@ defmodule SpendlyWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, :email_form, to_form(Map.put(changeset, :action, :insert)))}
+    end
+  end
+
+  def handle_event("validate_name", params, socket) do
+    %{"user" => user_params} = params
+
+    name_form =
+      socket.assigns.current_user
+      |> Accounts.change_user_name(user_params)
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, name_form: name_form)}
+  end
+
+  def handle_event("update_name", params, socket) do
+    %{"user" => user_params} = params
+    user = socket.assigns.current_user
+
+    case Accounts.update_user_name(user, user_params) do
+      {:ok, user} ->
+        name_form = user |> Accounts.change_user_name(user_params) |> to_form()
+
+        socket =
+          socket
+          |> put_flash(:info, "Name Updated")
+          |> assign(name_form: name_form)
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, name_form: to_form(changeset))}
     end
   end
 
