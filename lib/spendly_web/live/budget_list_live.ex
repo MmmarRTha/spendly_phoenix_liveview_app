@@ -4,8 +4,10 @@ defmodule SpendlyWeb.BudgetListLive do
 
   def mount(_params, _session, socket) do
     budgets =
-      Tracking.list_budgets()
-      |> Spendly.Repo.preload(:creator)
+      Tracking.list_budgets(
+        user: socket.assigns.current_user,
+        preload: :creator
+      )
 
     socket = assign(socket, budgets: budgets)
     {:ok, socket}
