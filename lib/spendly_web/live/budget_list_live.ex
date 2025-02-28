@@ -25,12 +25,9 @@ defmodule SpendlyWeb.BudgetListLive do
         current_user={@current_user}
       />
     </.modal>
-    <div class="flex justify-end">
-      <.link
-        navigate={~p"/budgets/new"}
-        class="flex items-center gap-2 px-3 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 hover:text-gray-800"
-      >
-        <.icon name="hero-plus" class="w-4 h-4" />
+    <div class="flex justify-end pb-5">
+      <.link navigate={~p"/budgets/new"} class="text-white btn-sub">
+        <.icon name="hero-plus" class="w-4 h-4 pt-5 pl-7" />
         <span>New Budget</span>
       </.link>
     </div>
