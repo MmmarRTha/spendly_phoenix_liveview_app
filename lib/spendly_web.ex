@@ -55,6 +55,8 @@ defmodule SpendlyWeb do
       use Phoenix.LiveView,
         layout: {SpendlyWeb.Layouts, :app}
 
+      import Spendly.Guards
+
       unquote(html_helpers())
     end
   end
