@@ -14,10 +14,14 @@
   .auth-card h2 {
     @apply text-3xl font-extrabold text-gray-900;
 }
-  .auth-card h3 {
+.auth-card h3 {
     @apply text-2xl font-extrabold text-gray-900;
 }
 
-  .btn-sub {
+.btn-sub {
     @apply relative flex justify-center px-4 py-3 text-base font-semibold transition-colors duration-150 bg-yellow-600 border border-transparent rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500;
+}
+
+.btn-link {
+    @apply inline-flex items-center px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500;
 }
