@@ -35,12 +35,12 @@ defmodule SpendlyWeb.Live.BudgetListLiveTest do
       conn = log_in_user(conn, user)
       {:ok, lv, _html} = live(conn, ~p"/budgets/new")
 
-      form = element(lv, "#create-budget-modal form")
-
-      html =
-        render_change(form, %{
+      form =
+        form(lv, "#create-budget-modal form", %{
           "budget" => %{"name" => ""}
         })
+
+      html = render_change(form)
 
       assert html =~ html_escape("can't be blank")
     end
@@ -49,10 +49,8 @@ defmodule SpendlyWeb.Live.BudgetListLiveTest do
       conn = log_in_user(conn, user)
       {:ok, lv, _html} = live(conn, ~p"/budgets/new")
 
-      form = form(lv, "#create-budget-modal form")
-
-      {:ok, _lv, html} =
-        render_submit(form, %{
+      form =
+        form(lv, "#create-budget-modal form", %{
           "budget" => %{
             "name" => "A New Name",
             "description" => "The New Description",
@@ -60,6 +58,9 @@ defmodule SpendlyWeb.Live.BudgetListLiveTest do
             "end_date" => "2025-02-28"
           }
         })
+
+      {:ok, _lv, html} =
+        render_submit(form)
         |> follow_redirect(conn)
 
       assert html =~ "Budget created"
@@ -71,5 +72,47 @@ defmodule SpendlyWeb.Live.BudgetListLiveTest do
       assert created_budget.start_date == ~D[2025-02-27]
       assert created_budget.end_date == ~D[2025-02-28]
     end
+  end
+
+  test "validation errors are presented when form is submitted with invalid data", %{
+    conn: conn,
+    user: user
+  } do
+    conn = log_in_user(conn, user)
+    {:ok, lv, _html} = live(conn, ~p"/budgets/new")
+
+    form =
+      form(lv, "#create-budget-modal form", %{
+        "budget" => %{"name" => ""}
+      })
+
+    html = render_submit(form)
+
+    assert html =~ html_escape("can't be blank")
+  end
+
+  test "end date before start date error is presented when form is submitted with invalid dates",
+       %{
+         conn: conn,
+         user: user
+       } do
+    conn = log_in_user(conn, user)
+    {:ok, lv, _html} = live(conn, ~p"/budgets/new")
+
+    attrs =
+      valid_budget_attributes(%{
+        start_date: ~D[2025-12-01],
+        end_date: ~D[2025-02-28]
+      })
+      |> Map.delete(:creator_id)
+
+    form =
+      form(lv, "#create-budget-modal form", %{
+        budget: attrs
+      })
+
+    html = render_submit(form)
+
+    assert html =~ "must end after start date"
   end
 end
